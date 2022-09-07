@@ -10,6 +10,7 @@ let testCaseResults: TestCaseResult[] = "INSERT_HERE";
 // Uncomment with when locally testing
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 // testCaseResults = [require("./results1.json"), require("./results2.json")];
+testCaseResults = [require("./results_2.json")];
 
 export function App() {
   return testCaseResults ? (
