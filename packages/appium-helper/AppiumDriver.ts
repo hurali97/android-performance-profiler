@@ -66,6 +66,7 @@ export class AppiumDriver {
       port: 4723,
       logLevel: "warn",
       capabilities,
+      hostname: '0.0.0.0'
     });
 
     Logger.info(`Appium capabilities: ${JSON.stringify(capabilities)}`);
@@ -196,6 +197,12 @@ export class AppiumDriver {
   async scrollDown(steps = 5) {
     // See https://stackoverflow.com/questions/63238189/appium-how-to-scroll-down-using-uiautomator2-and-webdriverio-with-react-native
     const selector = `new UiScrollable(new UiSelector().scrollable(true)).scrollForward(${steps})`;
+    return this.runUIAutomatorCommand(selector);
+  }
+
+  async scrollUp(steps = 5) {
+    // See https://stackoverflow.com/questions/63238189/appium-how-to-scroll-down-using-uiautomator2-and-webdriverio-with-react-native
+    const selector = `new UiScrollable(new UiSelector().scrollable(true)).scrollBackward(${steps})`;
     return this.runUIAutomatorCommand(selector);
   }
 
