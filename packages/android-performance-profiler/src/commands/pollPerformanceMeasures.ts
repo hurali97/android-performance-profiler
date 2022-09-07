@@ -12,9 +12,11 @@ export const pollPerformanceMeasures = (
 ) => {
   let initialTime: number | null = null;
   let previousTime: number | null = null;
+  let previousJankyFrames = 0;
+  let previousTotalFrames = 0;
 
   const cpuMeasuresAggregator = new CpuMeasureAggregator();
-
+  
   return cppPollPerformanceMeasures(
     pid,
     ({ cpu, ram: ramStr, gfxinfo, timestamp, adbExecTime }) => {
@@ -36,12 +38,32 @@ export const pollPerformanceMeasures = (
           subProcessesStats,
           interval
         );
+        const lines = gfxinfo.split("\n");
+        const jankyFramesIndex = lines.findIndex(
+          (line) => line.includes('Janky frames:')
+        );
+        const jankyFramesWithPercentage = lines[jankyFramesIndex].split(':').pop()
+        const jankyFrames = jankyFramesWithPercentage?.trim().split(' ')[0]
+        const totalFramesIndex = lines.findIndex(
+          (line) => line.includes('Total frames rendered')
+        );
+        const totalFrames = lines[totalFramesIndex].split(':').pop()?.trim()
+        const totalFramesToRender = Number(totalFrames) - previousTotalFrames
+        const jankyFramesRendered = Number(jankyFrames) - previousJankyFrames
+
         dataCallback({
           cpu: cpuMeasures,
           fps,
           ram,
           time: timestamp - initialTime,
+          totalFramesToRender,
+          jankyFrames: jankyFramesRendered,
+          renderedFrames: totalFramesToRender - jankyFramesRendered,
+          totalFramesTilNow: Number(totalFrames),
+          totalJankyFramesTilNow: Number(jankyFrames)
         });
+        previousJankyFrames = Number(jankyFrames)
+        previousTotalFrames = Number(totalFrames)
       } else {
         cpuMeasuresAggregator.initStats(subProcessesStats);
       }

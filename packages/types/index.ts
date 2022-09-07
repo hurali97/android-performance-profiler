@@ -8,6 +8,11 @@ export interface Measure {
   ram: number;
   fps: number;
   time: number;
+  jankyFrames?: number;
+  totalFramesToRender?: number;
+  renderedFrames?: number;
+  totalFramesTilNow?: number;
+  totalJankyFramesTilNow?: number;
 }
 
 export interface HistogramValue {
