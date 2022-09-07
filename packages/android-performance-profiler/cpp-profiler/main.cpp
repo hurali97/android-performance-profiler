@@ -90,7 +90,7 @@ long long printPerformanceMeasure(string pid)
 void pollPerformanceMeasures(char **argv)
 {
     string pid = argv[2];
-    int interval = 500;
+    int interval = argv[3] ? atoi(argv[3]) : 500;
 
     while (true)
     {
