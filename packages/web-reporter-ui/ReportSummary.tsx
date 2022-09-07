@@ -108,8 +108,19 @@ export const ReportSummary = ({
       ...results.map((result) => (
         <FrameworkDetection reactNativeDetected={result.reactNativeDetected} />
       )),
-    ],
+    ]
   ];
+
+  results.forEach((result) => {
+    for (let index = 0; index < result.iterations.length; index++) {
+      const iteration = result.iterations[index];
+      const measuresLastIndex = iteration.measures.length - 1;
+      table.push([`Iteration: ${index + 1}`, ''])
+      table.push(['Total Frames', String(iteration.measures[measuresLastIndex]?.totalFramesTilNow)])
+      table.push(['Janky Frames', String(iteration.measures[measuresLastIndex]?.totalJankyFramesTilNow)])
+      table.push(['Rendered Frames', String(Number(iteration.measures[measuresLastIndex]?.totalFramesTilNow) - Number(iteration.measures[measuresLastIndex]?.totalJankyFramesTilNow))])
+    }
+  });
 
   return (
     <>
