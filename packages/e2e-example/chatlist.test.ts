@@ -22,11 +22,11 @@ const getTestCases = async () => {
       let count = 1
       while (count <= 10) {
         for (let index = 0; index < 10; index++) {
-          await driver.scrollUp(2);
+          await driver.scrollDown(2);
         }
 
         for (let index = 0; index < 10; index++) {
-          await driver.scrollDown(2);
+          await driver.scrollUp(2);
         }
         count ++;
       }
